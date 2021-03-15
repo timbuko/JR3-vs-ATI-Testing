@@ -24,11 +24,11 @@ int led = 0,RPMlen , prevRPM;  //  INTEGERS TO STORE LED VALUE AND CURRENT RPM A
 
  }
 
-int fs = 2; ////  Sample frequency in Hz  //////////////////
+int fs = 3; ////  Sample frequency in Hz  //////////////////
 
  void loop(){
 
-  rpm=getSpeed(1000000/fs); //decreasing the sample frequency improves resolution but reduces sample rate
+  rpm=getSpeed(round(1000000/fs)); //decreasing the sample frequency improves resolution but reduces sample rate
   Serial.print("t");Serial.print(millis());
   Serial.print("r");Serial.println(rpm);
 //
