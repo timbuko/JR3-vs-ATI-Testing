@@ -1,4 +1,5 @@
-Time(ms),RPM
+Time,RPM
+(ms),-
 332,0
 666,0
 1000,0
