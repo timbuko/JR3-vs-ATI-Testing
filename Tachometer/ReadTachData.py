@@ -25,10 +25,12 @@ def main(): #Saves data to csv file and plots data vs time
     iTime=time.time()
     try:
         with open(fileid, "w",newline='') as csvfile:  #opens file to write data
-            fieldnames = ['Time(s)',PortA] #If more sensors are used add ports here
+            fieldnames = ['Time',PortA] #If more sensors are used add ports here
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
-            ArduinoSerial = serial.Serial(port='COM5', baudrate=9600)# NUMBER 0 ###############  NUMBER 0 
+            writer.writerow({'Time': '(ms)', PortA: '-', }) #Units
+            ArduinoSerial = serial.Serial(port='COM9', baudrate=9600)# NUMBER 0 ###############  NUMBER 0
+            #### Check COM in use with arduino app  ######
             ArduinoSerial.flushInput()
             print('Recording Data...')
             print('Press Ctrl c to finish recording')
@@ -36,11 +38,10 @@ def main(): #Saves data to csv file and plots data vs time
             while 1:
                 ser_bytes = ArduinoSerial.readline() #reads data from arduino
                 incoming = str(ser_bytes[0:len(ser_bytes)-2].decode("utf-8")) #has -2 to get rid of '\n'
-                print(incoming)
                 [a,t]=sepIncoming(incoming) #if more sensors used have to edit function
                 A=a  # NUMBER 2 ##################3################################ NUMBER 2
 
-                writer.writerow({'Time(s)':t,PortA:A,}) # NUMBER 3 ###################### NUMBER 3
+                writer.writerow({'Time':t,PortA:A,}) # NUMBER 3 ###################### NUMBER 3
 
                 tim.append(t)
                 Adata.append(A) # NUMBER 4 ##################################################### NUMBER 4
@@ -52,7 +53,7 @@ def main(): #Saves data to csv file and plots data vs time
 ##                    break
 
     except:
-        if time.time()-iTime < 1:
+        if time.time()-iTime < 2:
             print('There was an error, check connections and restart')
         else:
             print('Data saved to {}\n'.format(fileid))
@@ -65,7 +66,7 @@ def plotter(x,y,dataLabel,setLabel):
     Input x,y data and Ylabel
     """
     plt.scatter(x,y,label=dataLabel,color='r') #Label is what shows up in legend
-    plt.xlabel('Time(s)')
+    plt.xlabel('Time(ms)')
     plt.ylabel(dataLabel)
     plt.title('{} vs time'.format(dataLabel))
 ##    plt.legend()
@@ -85,7 +86,6 @@ def sepIncoming(incoming):
                     temp=int(incoming[i])
                     a+=incoming[i]
                     i+=1
-                    print(i)
                 except:
                     break
         elif incoming[i] == 't': #sensor in pin A1
@@ -135,5 +135,5 @@ def live_plotter_xy(x_val,y1_data,dataLabel,line1):
 
     return line1
 
-print('To begin type main()')
 
+main()
