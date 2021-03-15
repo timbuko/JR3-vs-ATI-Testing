@@ -1,7 +1,7 @@
 //Run motor at constant speed and measure rpm
 
-#include <Servo.h>
-Servo myMotor;
+//#include <Servo.h>
+//Servo myMotor;
 
 volatile byte pulses;       //  VOLATILE DATA TYPE TO STORE REVOLUTIONS
 unsigned long int rpm;  //  DEFINE RPM AND MAXIMUM RPM
@@ -14,13 +14,13 @@ int led = 0,RPMlen , prevRPM;  //  INTEGERS TO STORE LED VALUE AND CURRENT RPM A
      pulses = 0;      //  START ALL THE VARIABLES FROM 0     
      rpm = 0;
 
-     myMotor.attach(7,1000,2000); //Motor on pin 7
-
-     myMotor.write(0);            
-     delay(10000);//miliseconds
-
-
-    myMotor.write(10);
+//     myMotor.attach(7,1000,2000); //Motor on pin 7
+//
+//     myMotor.write(0);            
+//     delay(10000);//miliseconds
+//
+//
+//    myMotor.write(10);
 
  }
 
@@ -31,12 +31,12 @@ int fs = 2; ////  Sample frequency in Hz  //////////////////
   rpm=getSpeed(1000000/fs); //decreasing the sample frequency improves resolution but reduces sample rate
   Serial.print("t");Serial.print(millis());
   Serial.print("r");Serial.println(rpm);
-
-  if (micros()>20E+6){//Turn off motor after 10 sec(time starts at 10 sec)
-    myMotor.write(0);
-    Serial.println("Finished");
-    while(true);
- }
+//
+//  if (micros()>20E+6){//Turn off motor after 10 sec(time starts at 10 sec)
+////    myMotor.write(0);
+//    Serial.println("Finished");
+//    while(true);
+// }
  }
  
  void RPMCount()              // EVERYTIME WHEN THE SENSOR GOES FROM LOW TO HIGH , THIS FUNCTION WILL BE INVOKED 
