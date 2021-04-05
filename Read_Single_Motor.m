@@ -8,25 +8,50 @@ function Single_Motor_Arduino
 if fopen('data.mat') ~= -1
     load('data.mat')
 else
-    file = 'Single_Motor_2021_03_08_01';
+    file = 'Single_Motor_2021_03_15_07';
     [jr3,tach] = string_form(file);
     rpm=getRPM(tach);
     ft=getFT(jr3);
-    plot(rpm.Time,rpm.RPM)
-    
+    save('data','ft','rpm')
+
     
 end
+    ft.fz=1.927*ft.fz-1.560;%fix calibration from 3/15/21 trials
+    plot_data(rpm,ft)
+    fclose('all');
 end
 
 function [jr3,tach] = string_form(file)
 jr3 = sprintf('%s_FT',file);
-tach = sprintf('%s_Tacho.csv',file);
+tach = sprintf('%s_Tach.csv',file);
 end
 
 function rpm=getRPM(tach)
     rpm=readtable(tach);
-   	rpm(rpm.RPM == 0, :) = []
+   	rpm(rpm.RPM == 0, :) = [];
 end
 
 function ft=getFT(jr3)
-    ft
+    ft=readtable(jr3);
+    ft.Properties.VariableNames{1}='Time';
+end
+
+function plot_data(rpm,ft)
+% Take the raw data and plot against time
+
+figure('Visible','on','Name','Sensor Data')
+
+omega = uitab('Title','RPM');
+omegaax = axes(omega);
+plot(omegaax,rpm.Time,rpm.RPM)
+xlabel('Time (2Hz sample)')
+ylabel('RPM')
+title('RPM readings from Arduino Tach')
+
+f_t = uitab('Title','Fz');
+ftax = axes(f_t);
+plot(ftax,ft.Time,ft.fz)
+xlabel('Time (7.076Hz sample rate)')
+ylabel('Force (N)')
+title('JR3 Fz Readings')
+end
