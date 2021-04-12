@@ -21,21 +21,19 @@ end
     plot_data(rpm_aligned,ft_aligned)
     
     
-    figure(2)
+    figure()
     yyaxis left
     plot(rpm_aligned.Time./1000,rpm_aligned.RPM)
     hold on
     yyaxis right
     plot(ft_aligned.Time,ft_aligned.fz)
     
-    figure(3)
+    figure()
     scatter(rpm_aligned.RPM.^2,ft_aligned.fz,'*')
     title('Thrust vs \omega^2')
-    hold on
-    figure(4)
+    figure()
     scatter(rpm_aligned.RPM,ft_aligned.fz,'*')
     title('Thrust vs \omega')
-    hold on
     
     fclose('all');
 end
@@ -58,14 +56,14 @@ end
 function [rpm_aligned,ft]=align_data(rpm,ft)
 %align the data and interpolate so points match up 
     rpm(rpm.RPM<2000,:)=[];
-    ft(ft.fz<1,:)=[];
+    ft(ft.fz<0.2,:)=[];
     rpm.Time=rpm.Time-rpm.Time(1);
     ft.Time=ft.Time-ft.Time(1);
     
     len_rpm=length(rpm.RPM);
     len_fz=length(ft.fz);
-    rpm_a.Time= interp1(1:len_rpm,rpm.Time,linspace(1,len_rpm,len_fz))';
-    rpm_a.RPM = interp1(1:len_rpm,rpm.RPM,linspace(1,len_rpm,len_fz))';
+    rpm_a.RPM = interp1(1:len_rpm,rpm.RPM,linspace(1,len_rpm,len_fz));
+    rpm_a.Time= interp1(1:len_rpm,rpm.Time,linspace(1,len_rpm,len_fz));
     rpm_aligned=struct2table(rpm_a);
 end
 
