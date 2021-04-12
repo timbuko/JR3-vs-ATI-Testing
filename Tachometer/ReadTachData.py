@@ -28,7 +28,7 @@ def main(): #Saves data to csv file and plots data vs time
             fieldnames = ['Time',PortA] #If more sensors are used add ports here
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
-            writer.writerow({'Time': '(ms)', PortA: '-', }) #Units
+            writer.writerow({'Time': '(s)', PortA: '-', }) #Units
             ArduinoSerial = serial.Serial(port='COM9', baudrate=9600)# NUMBER 0 ###############  NUMBER 0
             #### Check COM in use with arduino app  ######
             ArduinoSerial.flushInput()
@@ -41,7 +41,7 @@ def main(): #Saves data to csv file and plots data vs time
                 [a,t]=sepIncoming(incoming) #if more sensors used have to edit function
                 A=a  # NUMBER 2 ##################3################################ NUMBER 2
 
-                writer.writerow({'Time':t,PortA:A,}) # NUMBER 3 ###################### NUMBER 3
+                writer.writerow({'Time':t/1000,PortA:A,}) # NUMBER 3 ###################### NUMBER 3
 
                 tim.append(t)
                 Adata.append(A) # NUMBER 4 ##################################################### NUMBER 4
