@@ -24,7 +24,7 @@ int led = 0,RPMlen , prevRPM;  //  INTEGERS TO STORE LED VALUE AND CURRENT RPM A
 
  }
 
-int fs = 5; ////  Sample frequency in Hz  //////////////////
+int fs = 4; ////  Sample frequency in Hz  //////////////////
 int n = 3; ////number of tape on motor///// (ie pulses per rotation)
 
  void loop(){

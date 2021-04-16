@@ -40,8 +40,9 @@ def main(): #Saves data to csv file and plots data vs time
                 incoming = str(ser_bytes[0:len(ser_bytes)-2].decode("utf-8")) #has -2 to get rid of '\n'
                 [a,t]=sepIncoming(incoming) #if more sensors used have to edit function
                 A=a  # NUMBER 2 ##################3################################ NUMBER 2
-
-                writer.writerow({'Time':t/1000,PortA:A,}) # NUMBER 3 ###################### NUMBER 3
+                t=str(int(t)/1000)
+                
+                writer.writerow({'Time':t,PortA:A,}) # NUMBER 3 ###################### NUMBER 3
 
                 tim.append(t)
                 Adata.append(A) # NUMBER 4 ##################################################### NUMBER 4
