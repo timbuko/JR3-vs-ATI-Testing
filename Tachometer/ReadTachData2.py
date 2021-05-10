@@ -1,11 +1,18 @@
-#Reads serial output of arduino. "Ardino outputs rpm following an 'r' and time following a 't'
-#the csv file created by this just ends up in the same folder as where this script is
+#This code does the same thing ast ReadTachData.py, but this one uses panda to write to csv
+#This code allows you to choose the output path (line 58) and out puts to tach_data_x.csv
+
 import time
 import math
-import csv
 import numpy as np
 import matplotlib.pyplot as plt #requires download
 import serial                   #requires download
+import os
+import pandas as pd
+import seqfile
+import sys
+
+base_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(0, base_dir)
 
 plt.style.use('ggplot') #Adds grid to plots
 print('Loading.....')
@@ -14,23 +21,15 @@ def main(): #Saves data to csv file and plots data vs time
     t=0
     incoming=0
     line1=[]
-    tim=[] #time values
-    
-
-    PortA='RPM'#label what sensor is
-    Adata=[]   #initialize data
 
 
+    RPM=[]   #initialize data
+    Time=[]
+    data={"Time":Time,"RPM":RPM}
 
-    fileid=input('Name the file (Include .csv)\n')
     iTime=time.time()
     try:
-        with open(fileid, "w",newline='') as csvfile:  #opens file to write data
-            fieldnames = ['Time',PortA]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerow({'Time': '(s)', PortA: '-', }) #Units
-            ArduinoSerial = serial.Serial(port='COM9', baudrate=9600)
+            ArduinoSerial = serial.Serial(port='COM9', baudrate=9600)# NUMBER 0 ###############  NUMBER 0
             #### Check COM in use with arduino app  ######
             ArduinoSerial.flushInput()
             print('Recording Data...')
@@ -42,11 +41,9 @@ def main(): #Saves data to csv file and plots data vs time
                 [a,t]=sepIncoming(incoming) #if more sensors used have to edit function
                 A=a
                 t=str(int(t)/1000)
-                
-                writer.writerow({'Time':t,PortA:A,})
 
-                tim.append(t)
-                Adata.append(A)
+                data["Time"].append(t)
+                data["RPM"].append(A)
 
 
 ##                line1=live_plotter_xy(tim,Adata,PortA,line1) # NUMBER 5.1 ###################### NUMBER 5.1
@@ -58,8 +55,13 @@ def main(): #Saves data to csv file and plots data vs time
         if time.time()-iTime < 2:
             print('There was an error, check connections and restart')
         else:
-            print('Data saved to {}\n'.format(fileid))
-            plotter(tim,Adata,PortA,'Plot 1')
+            in_path = os.path.expanduser('~\Documents\Aero Reasearch\JR3-vs-ATI-Testing\Tachometer\\tach_data')  ######Edit where file saves here ##########
+            dataName=seqfile.findNextFile(in_path, prefix='tach_data_', suffix='.csv')
+            out_path = dataName #saves file here
+            data.to_csv(out_path)
+
+            print('Data saved to {}\n'.format(dataName))
+            plotter(data["Time"],data["RPM"],'RPM','Plot 1')
 
 
 
