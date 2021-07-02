@@ -29,7 +29,7 @@ def main(): #Saves data to csv file and plots data vs time
 
     iTime=time.time()
     try:
-            ArduinoSerial = serial.Serial(port='COM9', baudrate=9600)# NUMBER 0 ###############  NUMBER 0
+            ArduinoSerial = serial.Serial(port='COM9', baudrate=115200)# NUMBER 0 ###############  NUMBER 0
             #### Check COM in use with arduino app  ######
             ArduinoSerial.flushInput()
             print('Recording Data...')
